@@ -27,25 +27,8 @@ def two_nums_sum_sorted(arr: list, target):
     return []
 
 
-print('two_nums_sum_mapping:', two_nums_sum_mapping(nums_to_sum, 10))
-print('two_nums_sum_sorted:', two_nums_sum_sorted(nums_to_sum, 11))
-
-
 #### 2 closest value in binary search tree time O(log(N)) space = time
-class BinaryTree:
-    def __init__(self, value):
-        self.value = value
-        self.left = None
-        self.right = None
-
-    @classmethod
-    def branch_sums(self, root):
-        sums = []
-        calc_branch_sums(root, 0, sums)
-        return sums
-
-
-class BSNode(BinaryTree):
+class BSTNode:
     def __init__(self, value, left=None, right=None):
         self.value = value
         self.left = left
@@ -53,14 +36,20 @@ class BSNode(BinaryTree):
 
     def add_child(self, value):
         if self.value > value:
-            self.left = BSNode(value)
+            self.left = BSTNode(value)
         elif self.value <= value:
-            self.right = BSNode(value)
+            self.right = BSTNode(value)
         else:
             raise ValueError('invalid value')
 
+    @classmethod
+    def branch_sums(cls, root):
+        sums = []
+        calc_branch_sums(root, 0, sums)
+        return sums
 
-bs_root = BSNode(10)
+
+bs_root = BSTNode(10)
 bs_root.add_child(5)
 bs_root.add_child(15)
 
@@ -75,7 +64,7 @@ bs_root.right.add_child(22)
 bs_root.right.left.add_child(14)
 
 
-def find_closest_val_bst(tree: BSNode, target):
+def find_closest_val_bst(tree: BSTNode, target):
     current_node = tree
     closest = float('inf')
     while current_node is not None:
@@ -88,9 +77,6 @@ def find_closest_val_bst(tree: BSNode, target):
         else:
             break
     return closest
-
-
-print('find_closest_val_bst: ', find_closest_val_bst(bs_root, 4))
 
 
 #### 3 depth-first search
@@ -129,11 +115,9 @@ D.add_child('H')
 G = D.children[0]
 G.add_child('K')
 
-print('depth_first_search:', A.depth_first_search([...]))
-
 
 #### 4 brahcn sums time O(N) space O(N)
-def calc_branch_sums(node: BinaryTree, curr_sum, sums):
+def calc_branch_sums(node: BSTNode, curr_sum, sums):
     if node is None:
         return
 
@@ -144,9 +128,6 @@ def calc_branch_sums(node: BinaryTree, curr_sum, sums):
 
     calc_branch_sums(node.left, new_curr_sum, sums)
     calc_branch_sums(node.right, new_curr_sum, sums)
-
-
-print('branch_sums:', bs_root.branch_sums(bs_root))
 
 
 #### 5 linked list construction
@@ -247,7 +228,7 @@ class DoublyLinkedList:
 # TODO
 
 
-#### 6 n-th fibinacci number
+#### 6 n-th fibonacci number
 def get_nth_fib1(n):  # O(n^2)time | O(n) space
     if n == 2:
         return 1
@@ -275,8 +256,6 @@ def get_nth_fib3(n):  # O(n)time | O(1) space
         counter += 1
     return last_two[1] if n > 1 else last_two[0]
 
-print('iter get_nth_fib: ', get_nth_fib3(100))
-
 
 #### 9 find three largest numbers (time O(n) | space O(1))
 def find_three_largest_nums(arr):
@@ -301,9 +280,6 @@ def shift_and_update(arr, num, idx):
             arr[i] = num
         else:
             arr[i] = arr[i + 1]
-
-
-print('find_three_largest_nums: ', find_three_largest_nums([141, 1, 17, -7, -17, -27, 18, 541, 8, 7, 7]))
 
 
 #### 8 binary search (time O(n) | space O(1))
@@ -620,6 +596,20 @@ class BST:
         while current_node.left is not None:
             current_node = current_node.left
         return current_node.value
+
+    def __repr__(self):
+        return str(self.value)
+
+
+bst_root = BST(10)
+for node in (5, 12, 4, 1, -4, 8, 17, 22, 35):
+    bst_root.insert(node)
+
+for node in (5, 12, 4, 1, -4, 8, 17, 22, 35):
+    print(bst_root.contains(node))
+for node in (2, 3, 6, 7):
+    print(bst_root.contains(node))
+
 
 
 #### 5 validate BST
