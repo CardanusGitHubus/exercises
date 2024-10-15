@@ -49,21 +49,6 @@ class BSTNode:
         return sums
 
 
-bs_root = BSTNode(10)
-bs_root.add_child(5)
-bs_root.add_child(15)
-
-bs_root.left.add_child(2)
-bs_root.left.add_child(5)
-
-bs_root.left.left.add_child(1)
-
-bs_root.right.add_child(13)
-bs_root.right.add_child(22)
-
-bs_root.right.left.add_child(14)
-
-
 def find_closest_val_bst(tree: BSTNode, target):
     current_node = tree
     closest = float('inf')
@@ -93,27 +78,6 @@ class Node:
         for child in self.children:
             child.depth_first_search(array)
         return array
-
-
-A = Node('A')
-A.add_child('B')
-A.add_child('C')
-A.add_child('D')
-
-B = A.children[0]
-B.add_child('E')
-B.add_child('F')
-
-F = B.children[1]
-F.add_child('I')
-F.add_child('J')
-
-D = A.children[2]
-D.add_child('G')
-D.add_child('H')
-
-G = D.children[0]
-G.add_child('K')
 
 
 #### 4 brahcn sums time O(N) space O(N)
@@ -225,7 +189,7 @@ class DoublyLinkedList:
         node.prev = None
         node.next = None
 
-# TODO
+# TODO: test cases
 
 
 #### 6 n-th fibonacci number
@@ -298,11 +262,6 @@ def binary_search(arr, item):
     return None
 
 
-lst_to_mrg_1 = [1, 7, 7, 15]
-lst_to_mrg_2 = [0, 4, 11, 13, 18, 22, 100, 102]
-lst_to_sort = [42, 4, 16, 8, 15, 23, 93, 0, 11, 2, 2, 7, 23]
-
-
 #### 11 insertion sort (time O(n^2) | space O(1))
 def insertion_sort(arr):
     for i in range(1, len(arr)):
@@ -317,11 +276,8 @@ def swap(i, j, arr):
     arr[i], arr[j] = arr[j], arr[i]
 
 
-print('insertion_sort: ', insertion_sort(lst_to_sort))
-
-
-#### * quick sort python (avg time O(nlog(n) | space O(n))
-def quick_sort_python(lst):
+#### * quick sort python (avg time O(nlog(n)) | space O(n))
+def quick_sort_pythonic(lst):
     if len(lst) <= 1:
         return lst
     elem = lst[0]
@@ -329,19 +285,14 @@ def quick_sort_python(lst):
     left = list(filter(lambda x: x < elem, lst))
     right = list(filter(lambda x: x > elem, lst))
 
-    return quick_sort_python(left) + middle + quick_sort_python(right)
+    return quick_sort_pythonic(left) + middle + quick_sort_pythonic(right)
 
 
-lst_to_sort = [42, 4, 16, 8, 15, 23, 93, 0, 11, 2, 2, 7, 23]
-print('quick sort python:', quick_sort_python(lst_to_sort))
-
-
-
-#### HARD 26 quick sort core
+#### HARD 26 quick sort canonical
 # Best: O(nlog(n)) time | O(log(n)) space
 # Average: O(nlog(n)) time | O(log(n)) space
 # Worst: O(n^2) time | O(log(n)) space
-def quick_sort_core(array):
+def quick_sort_canonic(array):
     quick_sort_helper(array, 0, len(array) - 1)
     return array
 
@@ -353,7 +304,7 @@ def quick_sort_helper(array, start_idx, end_idx):
     left_idx = start_idx + 1
     right_idx = end_idx
     while right_idx >= left_idx:
-        if array[left_idx] > array[pivot_idx] and array[right_idx] < array[pivot_idx]:
+        if array[left_idx] > array[pivot_idx] > array[right_idx]:
             swap(left_idx, right_idx, array)
         if array[left_idx] <= array[pivot_idx]:
             left_idx += 1
@@ -369,11 +320,7 @@ def quick_sort_helper(array, start_idx, end_idx):
         quick_sort_helper(array, start_idx, right_idx - 1)
 
 
-lst_to_sort = [42, 4, 16, 8, 15, 23, 93, 0, 11, 2, 2, 7, 23]
-print('quick_sort core:', quick_sort_core(lst_to_sort))
-
-
-#### * merge_sort (avg time O(nlog(n) | space O(n))
+#### VERY HARD merge_sort (avg time O(nlog(n) | space O(n))
 def merge_asc_lists1(a, b):
     i = j = 0
     res = []
@@ -386,10 +333,8 @@ def merge_asc_lists1(a, b):
             j += 1
     if i < len(a):
         res = res + a[i:]
-        print('i, res:', i, res)
     if j < len(b):
         res = res + b[j:]
-        print('j, res:', j, res)
     return res
 
 
@@ -400,24 +345,16 @@ def merge_asc_lists2(a, b):
         if i == len(a):
             res.append(b[j])
             j += 1
-            print('j, res:', j, res)
         elif j == len(b):
             res.append(a[i])
             i += 1
-            print('i, res:', i, res)
         elif a[i] < b[j]:
             res.append(a[i])
             i += 1
-            print('i, res:', i, res)
         else:
             res.append(b[j])
             j += 1
-            print('j, res:', j, res)
     return res
-
-
-print(f'merge ascending lists1 {lst_to_mrg_1} + {lst_to_mrg_2}:', merge_asc_lists1(lst_to_mrg_1, lst_to_mrg_2))
-print(f'merge ascending lists2 {lst_to_mrg_1} + {lst_to_mrg_2}:', merge_asc_lists2(lst_to_mrg_1, lst_to_mrg_2))
 
 
 def merge_sort(lst):
@@ -429,12 +366,8 @@ def merge_sort(lst):
     return merge_asc_lists1(left, right)
 
 
-lst_to_sort = [42, 4, 16, 8, 15, 23, 93, 0, 11, 2, 2, 7, 23]
-print('merge sort:', merge_sort(lst_to_sort))
-
-
 #### 14 caeser cipher encryptor (time O(n) | space O(n))
-def caeser_cipher_encryptor(string, key):
+def caesar_cipher_encryptor(string, key):
     new_letters = []
     new_key = key % 26
     # alphabet = list('abcdefghijklmnopqrstuvwxyz') - case w/o unicode codes
@@ -448,10 +381,6 @@ def get_new_letter(letter, key):  # , alphabet
     # new_letter_code = alphabet.index(letter) + key
     # return alphabet[new_letter_code] if new_letter_code <= 25 else alphabet[-1 + new_letter_code % 25]
     return chr(new_letter_code) if new_letter_code <= 122 else chr(96 + new_letter_code % 122)
-
-
-for i in range(3):
-    print('caeser_cipher_encryptor: ', caeser_cipher_encryptor('xyz', i))
 
 
 ## ALGOEXPERT
@@ -474,9 +403,6 @@ def three_nums_sum_sorted(arr: list, target):
             elif curr_sum > target:
                 right -= 1
     return triplets
-
-
-print('three_nums_sum_sorted: ', three_nums_sum_sorted([12, 3, 1, 2, -6, 5, -8, 6], 0))
 
 
 #### 2 smallest difference O(nlog(n) + mlog(m)) time | O(1) space
@@ -503,9 +429,6 @@ def smallest_difference(array_one, array_two):
             smallest = current
             smallest_pair = [first_num, second_num]
     return smallest_pair
-
-
-print('smallest_difference: ', smallest_difference([-1, 5, 10, 20, 28, 3], [26, 134, 135, 15, 17]))
 
 
 #### 3 move elem to the end: O(n) time | O(1) space - where n is the length of the array
@@ -601,19 +524,8 @@ class BST:
         return str(self.value)
 
 
-bst_root = BST(10)
-for node in (5, 12, 4, 1, -4, 8, 17, 22, 35):
-    bst_root.insert(node)
-
-for node in (5, 12, 4, 1, -4, 8, 17, 22, 35):
-    print(bst_root.contains(node))
-for node in (2, 3, 6, 7):
-    print(bst_root.contains(node))
-
-
-
 #### 5 validate BST
-def validate_bst(tree):
+def validate_bst(tree: BST):
     return validate_bst_helper(tree, float("-inf"), float("inf"))
 
 
@@ -628,7 +540,7 @@ def validate_bst_helper(tree, min_value, max_value):
 
 #### 6 traverse BST
 # O(n) time | O(n) space
-def in_order_traverse(tree, array):
+def in_order_traverse(tree: BST, array):
     if tree is not None:
         in_order_traverse(tree.left, array)
         array.append(tree.value)
@@ -637,7 +549,7 @@ def in_order_traverse(tree, array):
 
 
 # O(n) time | O(n) space
-def pre_order_traverse(tree, array):
+def pre_order_traverse(tree: BST, array):
     if tree is not None:
         array.append(tree.value)
         pre_order_traverse(tree.left, array)
@@ -646,12 +558,108 @@ def pre_order_traverse(tree, array):
 
 
 # O(n) time | O(n) space
-def post_order_traverse(tree, array):
+def post_order_traverse(tree: BST, array):
     if tree is not None:
         post_order_traverse(tree.left, array)
         post_order_traverse(tree.right, array)
         array.append(tree.value)
     return array
+
+
+#### 7 invert BST ('mirroring')
+def swap_left_right(tree: BST):
+    tree.left, tree.right = tree.right, tree.left
+
+
+# O(n) time | O(n) space
+def invert_binary_tree(tree: BST):
+    queue = [tree]
+    while len(queue):
+        current = queue.pop(0)
+        if current is None:
+            continue
+        swap_left_right(current)
+        queue.append(current.left)
+        queue.append(current.right)
+
+
+# O(n) time | O(depth) space
+def invert_binary_tree_rec(tree: BST):
+    if tree is None:
+        return
+    swap_left_right(tree)
+    invert_binary_tree_rec(tree.left)
+    invert_binary_tree_rec(tree.right)
+
+
+#### 17 min heap construction (node value <= children)
+class MinHeap:
+    def __init__(self, array):
+        self.heap = self.build_heap(array)
+
+    # O(n) time | O(1) space
+    def build_heap(self, array):
+        first_parent_idx = (len(array) - 2) // 2
+        for current_idx in reversed(range(first_parent_idx + 1)):
+            self.sift_down(current_idx, len(array) - 1, array)
+        return array
+
+    # O(log(n)) time | O(1) space
+    def sift_down(self, current_idx, end_idx, heap):
+        child_one_idx = current_idx * 2 + 1
+        while child_one_idx <= end_idx:
+            child_two_idx = current_idx * 2 + 2 if current_idx * 2 + 2 <= end_idx else -1
+            if child_two_idx != -1 and heap[child_two_idx] < heap[child_one_idx]:
+                idx_to_swap = child_two_idx
+            else:
+                idx_to_swap = child_one_idx
+            if heap[idx_to_swap] < heap[current_idx]:
+                self.swap(current_idx, idx_to_swap, heap)
+                current_idx = idx_to_swap
+                child_one_idx = current_idx * 2 + 1
+            else:
+                return
+
+    # O(log(n)) time | O(1) space
+    def sift_up(self, current_idx, heap):
+        parent_idx = (current_idx - 1) // 2
+        while current_idx > 0 and heap[current_idx] < heap[parent_idx]:
+            self.swap(current_idx, parent_idx, heap)
+            current_idx = parent_idx
+            parent_idx = (current_idx - 1) // 2
+
+    # O(1) time | O(1) space
+    def peek(self):
+        return self.heap[0]
+
+    # O(log(n)) time | O(1) space
+    def remove(self):
+        self.swap(0, len(self.heap) - 1, self.heap)
+        value_to_remove = self.heap.pop()
+        self.sift_down(0, len(self.heap) - 1, self.heap)
+        return value_to_remove
+
+    # O(log(n)) time | O(1) space
+    def insert(self, value):
+        self.heap.append(value)
+        self.sift_up(len(self.heap) - 1, self.heap)
+
+    def swap(self, i, j, heap):
+        heap[i], heap[j] = heap[j], heap[i]
+
+
+#### 21 search in sorted matrix O(n+m) time | O(1) space
+def search_in_sorted_matrix(matrix, target):
+    row = 0
+    col = len(matrix[0]) - 1
+    while row < len(matrix[0]) and col >= 0:
+        if matrix[row][col] > target:
+            col -= 1
+        elif matrix[row][col] < target:
+            row += 1
+        else:
+            return [row, col]
+    return [-1, -1]
 
 
 #### 26 suffix tree construction
@@ -699,6 +707,70 @@ def reverse_linked_list(head):
     return p1
 
 
+#### 25 quick select (to find a k-th smallest value) O(n) time | O(1) space
+def quickselect(arr, k):
+    position = k - 1
+    return quickselect_helper(arr, 0, len(arr) - 1, position)
+
+
+def quickselect_helper(arr, start_idx, end_idx, pos):
+
+    while True:
+        if start_idx > end_idx:
+            raise Exception('Algorithm should never arrive here!')
+        pivot_idx = start_idx
+        left_idx = start_idx + 1
+        right_idx = end_idx
+        while left_idx <= right_idx:
+            if arr[left_idx] > arr[pivot_idx] > arr[right_idx]:
+                swap(left_idx, right_idx, arr)
+            if arr[left_idx] <= arr[pivot_idx]:
+                left_idx += 1
+            if arr[right_idx] >= arr[pivot_idx]:
+                right_idx -= 1
+        swap(pivot_idx, right_idx, arr)
+        if right_idx == pos:
+            return arr[right_idx]
+        elif right_idx < pos:
+            start_idx = right_idx + 1
+        else:
+            end_idx = right_idx - 1
+
+
+#### 27 heap sort (to find a k-th smallest value) O(n) time | O(1) space
+# Best: O(nlog(n)) time | O(1) space
+# Average: O(nlog(n)) time | O(1) space
+# Worst: O(nlog(n)) time | O(1) space
+def heap_sort(array):
+    build_max_heap(array)
+    for end_idx in reversed(range(1, len(array))):
+        swap(0, end_idx, array)
+        sift_down(0, end_idx - 1, array)
+    return array
+
+
+def build_max_heap(array):
+    first_parent_idx = (len(array) - 2) // 2
+    for current_idx in reversed(range(first_parent_idx + 1)):
+        sift_down(current_idx, len(array) - 1, array)
+
+
+def sift_down(current_idx, end_idx, heap):
+    child_one_idx = current_idx * 2 + 1
+    while child_one_idx <= end_idx:
+        child_two_idx = current_idx * 2 + 2 if current_idx * 2 + 2 <= end_idx else -1
+        if child_two_idx > -1 and heap[child_two_idx] > heap[child_one_idx]:
+            idx_to_swap = child_two_idx
+        else:
+            idx_to_swap = child_one_idx
+        if heap[idx_to_swap] > heap[current_idx]:
+            swap(current_idx, idx_to_swap, heap)
+            current_idx = idx_to_swap
+            child_one_idx = current_idx * 2 + 1
+        else:
+            return
+
+
 ## ALGOEXPERT
 ### VERY HARD
 #### 7 Knuth–Morris–Pratt algorithm
@@ -714,6 +786,7 @@ def KMP(text, pattern):
         return
 
     chars = list(pattern)
+    pattern_occurs = []
 
     # next[i] stores the index of the next best partial match
     next = [0] * (len(pattern) + 1)
@@ -733,14 +806,99 @@ def KMP(text, pattern):
             j = j + 1
             if j == len(pattern):
                 print('Pattern occurs with shift', (i - j + 1))
+                pattern_occurs.append(i - j + 1)
         elif j > 0:
             j = next[j]
             i = i - 1  # since `i` will be incremented in the next iteration
         i = i + 1
+    return pattern_occurs
 
 
-# Program to implement the KMP algorithm in Python
-text = 'ABCABAABCABAC'
-pattern = 'CAB'
-print('Knuth–Morris–Pratt: ')
-KMP(text, pattern)
+## ALGOEXPERT
+### EXTREMELY HARD
+#### 2 Airport connections
+# O(a * (a + r) + a + r + alog(a)) time | O(a + r) space - where a is the number of airports and r is number of routes
+def airport_connections(airports, routes, starting_airport):
+    airport_graph = create_airport_graph(airports, routes)
+    unreachable_airport_nodes = get_unreachable_airport_nodes(airport_graph, airports, starting_airport)
+    mark_unreachable_connections(airport_graph, unreachable_airport_nodes)
+    return get_min_number_of_new_connections(airport_graph, unreachable_airport_nodes)
+
+
+# O(a + r) time | O(a + r) space
+def create_airport_graph(airports, routes):
+    airport_graph = {}
+    for airport in airports:
+        airport_graph[airport] = AirportNode(airport)
+    for route in routes:
+        # ['LGA', 'JFK']
+        airport, connection = route
+        airport_graph[airport].connections.append(connection)
+    return airport_graph
+
+
+# O(a + r) time | O(a) space
+def get_unreachable_airport_nodes(airport_graph, airports, starting_airport):
+    visited_airports = {}
+    depth_first_traverse_airports(airport_graph, starting_airport, visited_airports)
+
+    unreachable_airport_nodes = []
+    for airport in airports:
+        if airport in visited_airports:
+            continue
+        airport_node = airport_graph[airport]
+        airport_node.is_reachable = False
+        unreachable_airport_nodes.append(airport_node)
+    return unreachable_airport_nodes
+
+
+def depth_first_traverse_airports(airport_graph, airport, visited_airports):
+    if airport in visited_airports:
+        return
+    visited_airports[airport] = True
+    connections = airport_graph[airport].connections
+    for connection in connections:
+        depth_first_traverse_airports(airport_graph, connection, visited_airports)
+
+
+# O(a * (a + r)) time | O(a) space
+def mark_unreachable_connections(airport_graph, unreachable_airport_nodes):
+    for airport_node in unreachable_airport_nodes:
+        airport = airport_node.airport
+        unreachable_connections = []
+        depth_first_add_unreachable_connections(airport_graph, airport, unreachable_connections, {})
+        airport_node.unreachable_connections = unreachable_connections
+
+
+def depth_first_add_unreachable_connections(airport_graph, airport, unreachable_connections, visited_airports):
+    if airport_graph[airport].is_reachable:
+        return
+    if airport in visited_airports:
+        return
+    visited_airports[airport] = True
+    unreachable_connections.append(airport)
+    connections = airport_graph[airport].connections
+    for connection in connections:
+        depth_first_add_unreachable_connections(airport_graph, connection, unreachable_connections, visited_airports)
+
+
+# O(alog(a) + a + r) time | O(1) space
+def get_min_number_of_new_connections(airport_graph, unreachable_airport_nodes):
+    unreachable_airport_nodes.sort(key=lambda airport: len(airport.unreachable_connections), reverse=True)
+
+    number_of_new_connections = 0
+    for airportNode in unreachable_airport_nodes:
+        if airportNode.is_reachable:
+            continue
+        number_of_new_connections += 1
+        for connection in airportNode.unreachable_connections:
+            airport_graph[connection].is_reachable = True
+    return number_of_new_connections
+
+
+class AirportNode:
+    def __init__(self, airport):
+        self.airport = airport
+        self.connections = []
+        self.is_reachable = True
+        self.unreachable_connections = []
