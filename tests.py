@@ -217,14 +217,14 @@ class TestKnuthMorrisPratt(unittest.TestCase):
 
 class TestAirportConnections(unittest.TestCase):
     def test_airport_connections(self):
-        airports = ['EWH', 'HND', 'ICN', 'JFK', 'LGA', 'BGI', 'ORD', 'DSM', 'SFO',
+        airports = ['EWR', 'HND', 'ICN', 'JFK', 'LGA', 'BGI', 'ORD', 'DSM', 'SFO',
                     'LHR', 'EYW', 'SAN', 'TLV', 'DEL', 'DOH', 'SIN', 'COG', 'BUD']
-        routes = [('EWH', 'HND'), ('HND', 'ICN'), ('HND', 'JFK'), ('ICN', 'JFK'),
+        routes = [('EWR', 'HND'), ('HND', 'ICN'), ('HND', 'JFK'), ('ICN', 'JFK'),
                   ('JFK', 'LGA'), ('BGI', 'LGA'), ('ORD', 'BGI'), ('DSM', 'ORD'),
                   ('SFO', 'DSM'), ('LHR', 'SFO'), ('EYW', 'LHR'), ('SAN', 'EYW'),
                   ('SFO', 'SAN'), ('TLV', 'DEL'), ('DEL', 'DOH'), ('DEL', 'COG'),
                   ('DEL', 'SIN'), ('COG', 'BUD'), ('COG', 'SIN')]
-        assert algoexprt.airport_connections(airports, routes, 'LGA') == 3
+        assert algoexprt.airport_connections(airports, routes, 'LGA') == (3, ['SFO', 'TLV', 'EWR'])
 
 
 if __name__ == '__main__':

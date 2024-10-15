@@ -886,14 +886,16 @@ def depth_first_add_unreachable_connections(airport_graph, airport, unreachable_
 def get_min_number_of_new_connections(airport_graph, unreachable_airport_nodes):
     unreachable_airport_nodes.sort(key=lambda airport: len(airport.unreachable_connections), reverse=True)
 
+    airports_to_reach = []
     number_of_new_connections = 0
-    for airportNode in unreachable_airport_nodes:
-        if airportNode.is_reachable:
+    for airport_node in unreachable_airport_nodes:
+        if airport_node.is_reachable:
             continue
         number_of_new_connections += 1
-        for connection in airportNode.unreachable_connections:
+        airports_to_reach.append(airport_node.airport)
+        for connection in airport_node.unreachable_connections:
             airport_graph[connection].is_reachable = True
-    return number_of_new_connections
+    return number_of_new_connections, airports_to_reach
 
 
 class AirportNode:
