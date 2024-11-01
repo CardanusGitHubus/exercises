@@ -1,9 +1,6 @@
 ## ALGOEXPERT
 ### EASY
 #### 1 two number sum. (sorted): time O(Nlog(N)) space O(1)
-nums_to_sum = [3, 5, -4, 8, 11, 1, -1, 6]
-lst_to_sort = [4, 8, 15, 16, 23, 42, 0, 11, 2, 2, 7, 93, 23]
-
 def two_nums_sum_mapping(arr: list, target):
     mapping = set()
     for i in arr:
@@ -64,7 +61,8 @@ def find_closest_val_bst(tree: BSTNode, target):
     return closest
 
 
-#### 3 depth-first search
+#### EASY 3 depth-first search
+#### MEDIUM 14 breadth-first search
 class Node:
     def __init__(self, name):
         self.children = []
@@ -77,6 +75,16 @@ class Node:
         array.append(self.name)
         for child in self.children:
             child.depth_first_search(array)
+        return array
+
+    # O(v + e) time | O(v) space (e - edges, v - nodes)
+    def breadth_first_search(self, array):
+        queue = [self]
+        while len(queue) > 0:
+            current = queue.pop(0)
+            array.append(current.name)
+            for child in current.children:
+                queue.append(child)
         return array
 
 
@@ -95,7 +103,7 @@ def calc_branch_sums(node: BSTNode, curr_sum, sums):
 
 
 #### 5 linked list construction
-class DoublyLinkedList:
+class _DoublyLinkedList:
     def __init__(self):
         self.head = None
         self.tail = None
@@ -592,6 +600,47 @@ def invert_binary_tree_rec(tree: BST):
     invert_binary_tree_rec(tree.right)
 
 
+#### 8 max subset sum no adjacent
+# O(n) time | O(n) space
+def max_subset_sum_no_adjacent_1(array):
+    if not len(array):
+        return 0
+    elif len(array) == 1:
+        return array[0]
+    max_sums = array[:]  # at every index stores greatest sum of previous part of array
+    max_sums[1] = max(array[0], array[1])
+    for i in range(2, len(array)):
+        max_sums[i] = max(max_sums[i - 1], max_sums[i - 2] + array[i])
+    return max_sums[-1]
+
+
+# O(n) time | O(1) space
+def max_subset_sum_no_adjacent_2(array):
+    if not len(array):
+        return 0
+    elif len(array) == 1:
+        return array[0]
+    second = array[0]
+    first = max(array[0], array[1])
+    for i in range(2, len(array)):
+        current = max(first, second + array[i])
+        second = first
+        first = current
+    return first
+
+
+#### 9 number of ways to make change
+# O(nd) time | O(n) space
+def number_of_ways_to_make_change(n, denoms):
+    ways = [0 for amount in range(n + 1)]
+    ways[0] = 1
+    for denom in denoms:
+        for amount in range(1, n + 1):
+            if denom <= amount:
+                ways[amount] += ways[amount - denom]
+    return ways[n]
+
+
 #### 17 min heap construction (node value <= children)
 class MinHeap:
     def __init__(self, array):
@@ -812,6 +861,101 @@ def KMP(text, pattern):
             i = i - 1  # since `i` will be incremented in the next iteration
         i = i + 1
     return pattern_occurs
+
+
+#### 9 LRU cache
+class LRUCache:
+    def __init__(self, max_size):
+        self.cache = {}
+        self.maxSize = max_size or 1
+        self.currentSize = 0
+        self.list_of_most_recent = DoublyLinkedList()
+
+    # O(1) time | O(1) space
+    def insert_key_value_pair(self, key, value):
+        if key not in self.cache:
+            if self.currentSize == self.maxSize:
+                self.evict_least_recent()
+            else:
+                self.currentSize += 1
+            self.cache[key] = DoublyLinkedListNode(key, value)
+        else:
+            self.replace_key(key, value)
+        self.update_most_recent(self.cache[key])
+
+    # O(1) time | O(1) space
+    def get_value_from_key(self, key):
+        if key not in self.cache:
+            return None
+        self.update_most_recent(self.cache[key])
+        return self.cache[key].value
+
+    # O(1) time | O(1) space
+    def get_most_recent_key(self):
+        return self.list_of_most_recent.head.key
+
+    def evict_least_recent(self):
+        key_to_remove = self.list_of_most_recent.tail.key
+        self.list_of_most_recent.remove_tail()
+        del self.cache[key_to_remove]
+
+    def update_most_recent(self, node):
+        self.list_of_most_recent.set_head_to(node)
+
+    def replace_key(self, key, value):
+        if key not in self.cache:
+            raise Exception("The provided key isn't in the cache!")
+        self.cache[key].value = value
+
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+    def set_head_to(self, node):
+        if self.head == node:
+            return
+        elif self.head is None:
+            self.head = node
+            self.tail = node
+        elif self.head == self.tail:
+            self.tail.prev = node
+            self.head = node
+            self.head.next = self.tail
+        else:
+            if self.tail == node:
+                self.remove_tail()
+            node.remove_bindings()
+            self.head.prev = node
+            node.next = self.head
+            self.head = node
+
+    def remove_tail(self):
+        if self.tail is None:
+            return
+        if self.tail == self.head:
+            self.head = None
+            self.tail = None
+            return
+        self.tail = self.tail.prev
+        self.tail.next = None
+
+
+class DoublyLinkedListNode:
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        self.prev = None
+        self.next = None
+
+    def remove_bindings(self):
+        if self.prev is not None:
+            self.prev.next = self.next
+        if self.next is not None:
+            self.next.prev = self.prev
+        self.prev = None
+        self.next = None
 
 
 ## ALGOEXPERT

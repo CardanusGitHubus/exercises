@@ -77,30 +77,34 @@ class TestBst(unittest.TestCase):
         assert children == [self.bst_root.left, self.bst_root.right]
 
 
-class TestDepthFirstSearch(unittest.TestCase):
+class TestDepthBreadthFirstSearches(unittest.TestCase):
+    A = algoexprt.Node('A')
+    A.add_child('B')
+    A.add_child('C')
+    A.add_child('D')
+
+    B = A.children[0]
+    B.add_child('E')
+    B.add_child('F')
+
+    F = B.children[1]
+    F.add_child('I')
+    F.add_child('J')
+
+    D = A.children[2]
+    D.add_child('G')
+    D.add_child('H')
+
+    G = D.children[0]
+    G.add_child('K')
+
     def test_depth_first_search(self):
-        A = algoexprt.Node('A')
-        A.add_child('B')
-        A.add_child('C')
-        A.add_child('D')
-
-        B = A.children[0]
-        B.add_child('E')
-        B.add_child('F')
-
-        F = B.children[1]
-        F.add_child('I')
-        F.add_child('J')
-
-        D = A.children[2]
-        D.add_child('G')
-        D.add_child('H')
-
-        G = D.children[0]
-        G.add_child('K')
-
         depth_first_order = ['A', 'B', 'E', 'F', 'I', 'J', 'C', 'D', 'G', 'K', 'H']
-        self.assertEqual(A.depth_first_search([]), depth_first_order)
+        self.assertEqual(self.A.depth_first_search([]), depth_first_order)
+
+    def test_breadth_first_search(self):
+        breadth_first_order = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
+        self.assertEqual(self.A.breadth_first_search([]), breadth_first_order)
 
 
 class TestNthFibonacci(unittest.TestCase):
@@ -182,6 +186,19 @@ class TestMoveElemToEnd(unittest.TestCase):
         assert algoexprt.move_element_to_end(arr, 5) == [-1, 3, 10, 20, 28, 5]
 
 
+class TestMaxSubsetSumNoAdjacent1(unittest.TestCase):
+    def test_max_subset_sum_no_adjacent(self):
+        arr = [7, 10, 12, 7, 9, 14]
+        assert algoexprt.max_subset_sum_no_adjacent_1(arr) == 7 + 12 + 14
+        assert algoexprt.max_subset_sum_no_adjacent_2(arr) == 7 + 12 + 14
+
+
+class TestNumberOfWaysToMakeChange(unittest.TestCase):
+    def test_number_of_ways_to_make_change(self):
+        target, amount = 10, [1, 5, 10, 25]
+        assert algoexprt.number_of_ways_to_make_change(target, amount) == 4
+
+
 class TestSearchInSortedMatrix(unittest.TestCase):
     def test_search_in_sorted_matrix(self):
         matrix = [
@@ -213,6 +230,17 @@ class TestKnuthMorrisPratt(unittest.TestCase):
         pattern = 'CAB'
         pattern_occurs = [2, 8]
         assert algoexprt.KMP(text, pattern) == pattern_occurs
+
+
+class TestLruCache(unittest.TestCase):
+    def test_lru_cache(self):
+        lru = algoexprt.LRUCache(5)
+        for key, value in {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5}.items():
+            lru.insert_key_value_pair(key, value)
+            assert lru.get_value_from_key(key) == value
+        assert lru.get_most_recent_key() == 'e'
+        lru.insert_key_value_pair('f', 6)
+        assert lru.get_most_recent_key() == 'f'
 
 
 class TestAirportConnections(unittest.TestCase):
